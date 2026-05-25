@@ -41,7 +41,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: multiple_paths_with_exclusions
-          paths: | 
+          path: | 
             ./myartifact.txt
             artifact/
             !**/hostname.txt
