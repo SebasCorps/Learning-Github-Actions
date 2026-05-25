@@ -16,12 +16,35 @@ jobs:
         uses: actions/checkout@v6.0.2
       - name: Step-3
         run:  |
-          echo 'pwd' >> myartifact.txt
-          ls -ltr
-          hostname
+          echo `pwd` >> myartifact.txt
+          mkdir artifacts
+          echo `ls -ltr` >> artifacts/list.txt
+          echo `hostname` >> artifacts/hostname.txt
       - name: Upload Single File
         uses: actions/upload-artifact@v7
         with:
           name: Single_File
           path: ./myartifact.txt
+      - name: Upload from directory
+        uses: actions/upload-artifact@v7
+        with:
+          name: directory_artifacts
+          path: artifact/
+      - name: Upload from multiple paths
+        uses: actions/upload-artifact@v7
+        with:
+          name: multiple_paths
+          path: |
+            ./myartifact.txt
+            artifact/
+      - name: Upload from multiple paths with exclusions
+        uses: actions/upload-artifact@v7
+        with:
+          name: multiple_paths_with_exclusions
+          paths: | 
+            ./myartifact.txt
+            artifact/
+            !**/hostname.txt
+            
+      
            
