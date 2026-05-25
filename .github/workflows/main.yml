@@ -23,7 +23,7 @@ jobs:
       - name: Upload Single File
         uses: actions/upload-artifact@v7
         with:
-          name: Single_File
+          name: single_file
           path: ./myartifact.txt
       - name: Upload from directory
         uses: actions/upload-artifact@v7
@@ -45,6 +45,23 @@ jobs:
             ./myartifact.txt
             artifact/
             !**/hostname.txt
+  job2:
+    name: JOB2
+    runs-on: ubuntu-latest
+    steps:
+      - name: cheking current directory
+        run: |
+          pwd
+          ls -ltr
+      - name: Download single file artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: single_file
+      - name: cheking current directory post download
+        run: |
+          pwd
+          ls -ltr
+      
             
       
            
