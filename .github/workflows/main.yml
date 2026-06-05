@@ -2,9 +2,8 @@ name: my-first-workflow
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
+      - dev
+      - 'feature-*'
       - main
 jobs:
   job1:
