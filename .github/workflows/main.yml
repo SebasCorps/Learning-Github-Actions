@@ -87,5 +87,29 @@ jobs:
            echo "[INFO] Current Step is running on ${{ runner.os }}."
            echo "[INFO] Current JOB Id is ${{ job.check_run_id }}."
 
+  staging:
+    name: STAGE_DEPLOYMENT
+    runs-on: ubuntu-latest
+    steps:
+      - name: Referring environment variables
+        run: echo "[INFO] Running deployment on ${{ vars.HOST }} using ${{ vars.USER }}."
+      - name: Referring Environment Secrets
+        run: echo "[INFO] password for ${{ vars.USER}} is ${{ secrets.PASSWORD }}."
+    environment: 
+      name: STAGING     
+      
+  production:
+    name: PRODUCTION_DEPLOYMENT
+    runs-on: ubuntu-latest
+    steps:
+      - name: Referring environment variables
+        run: echo "[INFO] Running deployment on ${{ vars.HOST }} using ${{ vars.USER }}."
+      - name: Referring Environment Secrets
+        run: echo "[INFO] password for ${{ vars.USER}} is ${{ secrets.PASSWORD }}."
+    environment: 
+      name: PRODUCTION
+    
+     
+
 
    
