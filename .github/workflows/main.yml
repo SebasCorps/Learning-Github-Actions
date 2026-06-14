@@ -8,6 +8,10 @@ on:
   pull_request:
     branches:
       - main
+env:
+  ENV_TYPE: DEV
+  APP_USER: thinknyx
+  APP_PORT: 80
 jobs:
   job1:
     name: JOB1
@@ -65,9 +69,49 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: single_file
-      - name: checking current directory post download
+      - name: Refering Environment Variables
         run: |
-          pwd
-          ls -ltr
-      - name: Sep for PR demo
-        run: exit 0
+          echo "[INFO] Running Deployment for $ENV_TYPE with user $APP_USER."
+          echo "[INFO] once deployment application is accessible on port $APP_PORT."
+      - name: Referencing Repository Secret
+        run: | 
+          echo "[INFO] application password is ${{ secrets.APP_PASSWORD}}"
+  job3:
+     name: JOB3
+     runs-on: ubuntu-latest
+     steps:
+       - name: Referring context or inb-built variables
+         run: |
+           echo "[INFO] treiggered by ${{ github.event_name }}."
+           echo "[INFO] new changes are added by ${{ github.actor }} in ${{ github.ref }} branch."
+           echo "[INFO] Current Step is running on ${{ runner.os }}."
+           echo "[INFO] Current JOB Id is ${{ job.check_run_id }}."
+
+  staging:
+    name: STAGE_DEPLOYMENT
+    runs-on: ubuntu-latest
+    steps:
+      - name: Referring environment variables
+        run: echo "[INFO] Running deployment on ${{ vars.HOST }} using ${{ vars.USER }}."
+      - name: Referring Environment Secrets
+        run: echo "[INFO] password for ${{ vars.USER}} is ${{ secrets.PASSWORD }}."
+    environment: 
+      name: STAGING
+    if: github.ref == 'refs/heads/dev' 
+      
+  production:
+    name: PRODUCTION_DEPLOYMENT
+    runs-on: ubuntu-latest
+    steps:
+      - name: Referring environment variables
+        run: echo "[INFO] Running deployment on ${{ vars.HOST }} using ${{ vars.USER }}."
+      - name: Referring Environment Secrets
+        run: echo "[INFO] password for ${{ vars.USER}} is ${{ secrets.PASSWORD }}."
+    environment: 
+      name: PRODUCTION
+    if: github.ref == 'refs/heads/main' 
+    
+     
+ 
+
+   
