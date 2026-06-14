@@ -70,4 +70,4 @@ jobs:
           pwd
           ls -ltr
       - name: Sep for PR demo
-        run: exit 0
+        run: exit 1
