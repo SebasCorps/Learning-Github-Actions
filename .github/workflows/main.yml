@@ -25,4 +25,13 @@ jobs:
          python -m pip install --upgrade pip
          pip install -r requirements.txt
      - name: Run Unite Test
-       run: pytest -v 
+       run: |
+          mkdir report/
+          pytest -v
+          pytest --junitxml=reports/unit-test-results.xml --cov=, --cov-report=xml --cov-report=term-missing - v
+
+     - name: upload code coverage report
+       uses: actions/upload-artifact@v5.0.0
+       with:
+         name: uni-test-report
+         path: reports/
