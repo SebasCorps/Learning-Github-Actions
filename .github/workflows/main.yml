@@ -76,3 +76,16 @@ jobs:
       - name: Referencing Repository Secret
         run: | 
           echo "[INFO] application password is ${{ secrets.APP_PASSWORD}}"
+  job3:
+     name: JOB3
+     runs-on: ubuntu-latest
+     steps:
+       - name: Referring context or inb-built variables
+         run: |
+           echo "[INFO] treiggered by ${{ github.event_name }}."
+           echo "[INFO] new changes are added by ${{ github.actor }} in ${{ github.ref_name}} branch."
+           echo "[INFO] Current Step is running on ${{ runner.os }}."
+           echo "[INFO] Current JOB Id is ${{ job.check_run_id }}."
+
+
+   
