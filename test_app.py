@@ -42,4 +42,10 @@ def test_add_task(client):
 def test_add_task_missing_title(client):
     """Test adding a task without title returns 400"""
     response = client.post(
-        "
+        "/tasks",
+        json={},
+        content_type="application/json"
+    )
+    assert response.status_code == 400
+    json_data = response.get_json()
+    assert "error" in json_data
