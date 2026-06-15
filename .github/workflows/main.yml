@@ -1,4 +1,4 @@
-name: my-first-workflow
+name: ci-pipeline
 on:
   push:
     branches:
