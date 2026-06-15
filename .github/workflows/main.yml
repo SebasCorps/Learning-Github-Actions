@@ -149,11 +149,13 @@ jobs:
       - name: Tag Image
         run: |
           IMAGE_TAG="${{ needs.build.outputs.image-tags }}"
-          docker image tag thinkynx_app:$IMAGE_TAG ${{ secrets.DOCKERHUB_USERNAME }}/thinkynx_app:$IMAGE_TAG
+          DOCKERHUB_USER=$(echo "${{ secrets.DOCKERHUB_USERNAME }}" | tr '[:upper:]' '[:lower:]')
+          docker image tag thinkynx_app:$IMAGE_TAG $DOCKERHUB_USER/thinkynx_app:$IMAGE_TAG
       - name: Push Image
         run: |
           IMAGE_TAG="${{ needs.build.outputs.image-tags }}"
-          docker image push ${{ secrets.DOCKERHUB_USERNAME }}/thinkynx_app:$IMAGE_TAG
+          DOCKERHUB_USER=$(echo "${{ secrets.DOCKERHUB_USERNAME }}" | tr '[:upper:]' '[:lower:]')
+          docker image push $DOCKERHUB_USER/thinkynx_app:$IMAGE_TAG
 
 
   publish-ghcr:
