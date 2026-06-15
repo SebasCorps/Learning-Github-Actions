@@ -66,11 +66,19 @@ jobs:
 
   SonarQube:                      # ← dentro de jobs: (mismo nivel que los otros)
     name: SonarQube
-    runs-on: ubuntu-latest        # ← minúsculas
+    runs-on: ubuntu-latest  
+    needs: unit-tests  # ← minúsculas
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      
+      - name: Download Coverage Report
+        uses: actions/download-artifact@v5.0.0
+        with:
+           
+          name: unit-test-report
+          path: reports/
 
       - name: SonarQube Scan
         uses: SonarSource/sonarcloud-github-action@master
