@@ -128,3 +128,30 @@ jobs:
         with:
           name: thinkynx_app_image
           path: thinkynx_app.tar
+
+  publish-dockerhub:
+    name: publish to docker hub 
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Donwload the image
+        uses: actions/download-artifact@5.0.0
+        with: 
+          name: thinkynx_app_image
+          path: .
+      - name: Load Docker Image
+        run: docker load -i thinkynx_app.tar
+
+      - name: Docker Login
+        uses: docker/login-action@v3.0.0 # docker login -u DOCKERHUBU_USER -P DOCKERHUB_PASSWORD
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Tag Image
+        run: |
+          IMAGE_TAG="${{needs.build.outputs.image-tags}}"
+          docker image tag thinknyx_app:IMAGE_TAG ${{secrets.DOCKERHUB_USERNAME}}/thinknyx_app:$IMAGE_TAG
+      - name: Push Image
+        run: |
+          IMAGE_TAG="${{needs.build.outputs.image-tags}}"
+          docker image push ${{secrets.DOCKERHUB_USERNAME}}/thinkynx_app:$IMAGE_TAG
