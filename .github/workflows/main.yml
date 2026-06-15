@@ -118,6 +118,7 @@ jobs:
           file: ./Dockerfile
           push: false
           tags: thinkynx_app:${{ steps.vars.outputs.IMAGE_TAGS }}
+          load: true
       
       - name: Save Docker Image as artifact
         run : docker save thinkynx_app:${{ steps.vars.outputs.IMAGE_TAGS }} -o thinkynx_app.tar
