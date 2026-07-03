@@ -18,6 +18,7 @@ jobs:
     with:
       run_codeql: true
       run_sonarqube: true
+      run_build: false
       
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
