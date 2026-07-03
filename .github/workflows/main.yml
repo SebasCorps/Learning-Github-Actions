@@ -14,7 +14,7 @@ permissions:
   contents: read
 jobs:
   ci-pipeline-job:
-    uses: Sebasxdd/reusable-workflows/.github/workflows/ci-pipeline.yml@main
+    uses: SebasCorps/reusable-workflows/.github/workflows/ci-pipeline.yml@main
     with:
       run_codeql: true
       run_sonarqube: true
