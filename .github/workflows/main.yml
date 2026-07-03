@@ -6,7 +6,11 @@ on:
   pull_request:
     branches:
       - main
-
+permissions:
+  actions: read
+  security-events: write
+  packages: write
+  contents: read
 jobs:
   ci-pipeline-job:
     uses: Sebasxdd/reusable-workflows/.github/workflows/ci-pipeline.yml@main
