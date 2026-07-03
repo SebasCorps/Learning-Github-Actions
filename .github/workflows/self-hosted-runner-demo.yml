@@ -3,7 +3,7 @@ name: self-hosted-runner-demo
 on:
   push:
     branches:
-      - dev
+      - dev   #test
 jobs:
     demo-1:
       name: Demo Job 1
