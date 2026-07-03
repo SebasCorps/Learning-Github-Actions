@@ -1,0 +1,39 @@
+name: self-hosted-runner-demo
+#
+on:
+  push:
+    branches:
+      - dev
+jobs:
+    demo-1:
+      name: Demo Job 1
+      runs-on: ubuntu-latest
+      steps:
+        - name: Display system information
+          run: |
+            echo "System information:"
+            echo "OS: $(uname -a)"
+            echo "CPU: $(uname -m)"
+            echo "Memory: $(free -h)"
+            echo "Disk: $(df -h)"
+            echo "Network: $(ip addr show)"
+            echo "Hostname: $(hostname)"
+            echo "User: $(whoami)"
+            echo "Home directory: $HOME"
+            echo "Current directory: $(pwd)"
+    demo-2:
+      name: Demo Job 2
+      runs-on: self-hosted
+      steps:
+        - name: Display system information
+          run: |
+            echo "System information:"
+            echo "OS: $(uname -a)"
+            echo "CPU: $(uname -m)"
+            echo "Memory: $(free -h)"
+            echo "Disk: $(df -h)"
+            echo "Network: $(ip addr show)"
+            echo "Hostname: $(hostname)"
+            echo "User: $(whoami)"
+            echo "Home directory: $HOME"
+            echo "Current directory: $(pwd)"
