@@ -7,7 +7,7 @@ on:
 jobs:
     demo-1:
       name: Demo Job 1
-      runs-on: github-actions-scaleset
+      runs-on: github-actions-scaleset-demo
       steps:
         - name: Display system information
           run: |
@@ -24,7 +24,7 @@ jobs:
             sleep 90
     demo-2:
       name: Demo Job 2
-      runs-on: github-actions-scaleset
+      runs-on: github-actions-scaleset-demo
       steps:
         - name: Display system information
           run: |
