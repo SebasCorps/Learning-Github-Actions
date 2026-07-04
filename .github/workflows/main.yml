@@ -27,6 +27,10 @@ jobs:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_PASSWORD }} 
 
   deploy-with-kubectl:
+    environment: STAGING
+    env:
+      NAMESPACE: ${{vars.NAMESPACE}}
+
     needs: ci-pipeline-job
     runs-on: github-actions-scaleset-demo
     steps:
@@ -57,3 +61,13 @@ jobs:
           yq e ' .spec.template.spec.containers[0].image = strenv(IMAGE)' manifest/deployment.yaml -i
           cat manifest/deployment.yaml
           
+      - name: Create Namespace if not exists
+        run: | 
+          kubectl get namespace $NAMESPACE || kubectl create namespace $NAMESPACE
+      - name: Deploy to kubernetes Cluster 
+        run: | 
+          kubectl apply -f manifest/ -n $NAMESPACE
+      - name: verify deployment
+        run: | 
+          kubectl rollout status deployment/thinkynx -n $NAMESPACE
+          kubectl get all -n $NAMESPACE
