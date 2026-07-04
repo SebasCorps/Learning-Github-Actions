@@ -57,7 +57,8 @@ jobs:
       - name: update image name in deployment yaml
         run: |
           IMAGE_TAGS="${{ github.run_id }}-${GITHUB_SHA::7}"
-          export IMAGE="ghcr.io/SebasCorps/Learning-Github-Actions/thinkynx_app:${IMAGE_TAGS}"
+          REPO_OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          export IMAGE="ghcr.io/${REPO_OWNER}/thinkynx_app:${IMAGE_TAGS}"
           yq e ' .spec.template.spec.containers[0].image = strenv(IMAGE)' manifest/deployment.yaml -i
           cat manifest/deployment.yaml
           
