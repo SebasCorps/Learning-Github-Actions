@@ -35,38 +35,8 @@ jobs:
     secrets:
       KUBECONFIG: ${{secrets.KUBECONFIG}}
   #
-  run-selenium-test:
-    environment: STAGING
-    needs: deploy-with-kubectl
-    runs-on: github-actions-scaleset-demo
-    steps:
-      - name: CheckoutCode
-        uses: actions/checkout@v5
-      - name: setup python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.10'
-      - name: Install Chromium
-        run: |
-            sudo apt-get update
-            sudo apt-get install -y software-properties-common
-            sudo add-apt-repository -y ppa:xtradeb/apps
-            sudo apt-get update
-            sudo apt-get install -y chromium chromium-driver
-            which chromium
-            which chromedriver
-      - name: Install dependencies
-        run: |
-          pip install -r requirements-tests.txt
-      - name: Run Selenium tests
-        env:
-          APP_BASE_URL: ${{VARS.APP_BASE_URL}}
-        run: |
-          mkdir -p reports
-          pytest tests/ --html=reports/selenium-report.html --self-contained-html
-      - name: Upload Selenium Test Report
-        uses: actions/upload-artifact@v4.0.0
-        with:
-           name: selenium-test-report
-           path: reports/
-           #
+  selenium-tests:
+     needs: deploy-with-kubectl
+     uses: SebasCorps/reusable-workflows/.github/workflows/run-selenium-tests.yml@main
+     with:
+       ENVIRONMENT: STAGING
