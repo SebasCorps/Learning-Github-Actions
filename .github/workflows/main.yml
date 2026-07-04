@@ -16,7 +16,7 @@ jobs:
   ci-pipeline-job:
     uses: SebasCorps/reusable-workflows/.github/workflows/ci-pipeline.yml@main
     with:
-      run_codeql: true #test222333434344343434
+      run_codeql: true #test2223334343443434344
       run_sonarqube: true
       run_build: true
       run_ghcr_publish: true
