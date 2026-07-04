@@ -22,8 +22,8 @@ def driver():
     options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1920,1080")
 
-    # ✅ IMPORTANT: Use Google Chrome (NOT chromium)
-    options.binary_location = "/usr/bin/google-chrome"
+    # ✅ Use Chromium (self-hosted runner is arm64; Google Chrome has no linux-arm64 build)
+    options.binary_location = "/usr/bin/chromium"
 
     # ✅ Let webdriver-manager handle compatible driver
     service = Service(ChromeDriverManager().install())
