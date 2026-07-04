@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thinkynxapp-deploy
+  labels:
+    app: thinkynxapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: thinkynxapp
+  template:
+    metadata:
+      labels:
+        app: thinkynxapp
+    spec:
+      containers:
+        - name: thinkynxapp
+          image: ghcr.io/sebascorps/thinkynx_app:28640011156-cf0e9ec
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi

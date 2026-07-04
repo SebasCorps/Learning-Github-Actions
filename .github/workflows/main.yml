@@ -16,11 +16,21 @@ jobs:
   ci-pipeline-job:
     uses: SebasCorps/reusable-workflows/.github/workflows/ci-pipeline.yml@main
     with:
-      run_codeql: true
+      run_codeql: true #test222333434344343434
       run_sonarqube: true
-      run_build: false
+      run_build: true
+      run_ghcr_publish: true
       
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_PASSWORD }} 
+
+  deploy-with-kubectl:
+    needs: ci-pipeline-job
+    uses: SebasCorps/reusable-workflows/.github/workflows/deploy-with-kubectl.yml@main
+    with:
+      ENVIRONMENT: STAGING
+      IMAGE_NAME: ghcr.io/sebasxdd/thinkynx_app
+    secrets:
+      KUBECONFIG: ${{secrets.KUBECONFIG}}
