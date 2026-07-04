@@ -34,3 +34,9 @@ jobs:
       IMAGE_NAME: ghcr.io/sebasxdd/thinkynx_app
     secrets:
       KUBECONFIG: ${{secrets.KUBECONFIG}}
+  #
+  selenium-tests:
+     needs: deploy-with-kubectl
+     uses: SebasCorps/reusable-workflows/.github/workflows/run-selenium-tests.yml@main
+     with:
+       ENVIRONMENT: STAGING
