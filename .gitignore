@@ -216,3 +216,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Kubernetes manifests (unignore, "MANIFEST" rule above matches this dir on case-insensitive filesystems)
+!manifest/
+!manifest/**
