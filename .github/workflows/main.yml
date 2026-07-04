@@ -31,7 +31,6 @@ jobs:
     uses: SebasCorps/reusable-workflows/.github/workflows/deploy-with-kubectl.yml@main
     with:
       ENVIRONMENT: STAGING
-      NAMESPACE: ${{vars.NAMESPACE}}
       IMAGE_NAME: ghcr.io/sebasxdd/thinkynx_app
     secrets:
       KUBECONFIG: ${{secrets.KUBECONFIG}}
