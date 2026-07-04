@@ -36,4 +36,4 @@ EXPOSE 8000
 
 # Use Gunicorn for production serving
 # Replace 'app:app' with your Flask instance path if different
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app: app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app:app"]
