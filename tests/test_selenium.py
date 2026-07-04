@@ -5,7 +5,6 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
 
 # ✅ Base URL from environment variable
 BASE_URL = os.getenv("APP_BASE_URL", "http://127.0.0.1:5000")
@@ -25,8 +24,9 @@ def driver():
     # ✅ Use Chromium (self-hosted runner is arm64; Google Chrome has no linux-arm64 build)
     options.binary_location = "/usr/bin/chromium"
 
-    # ✅ Let webdriver-manager handle compatible driver
-    service = Service(ChromeDriverManager().install())
+    # ✅ Use the system chromedriver (matches the arm64 Chromium package;
+    # Google's Chrome-for-Testing feed has no linux-arm64 chromedriver)
+    service = Service("/usr/bin/chromedriver")
 
     driver = webdriver.Chrome(service=service, options=options)
     yield driver
