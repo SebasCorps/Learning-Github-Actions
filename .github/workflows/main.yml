@@ -1,9 +1,6 @@
 name: ci-pipeline
 #
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
@@ -12,6 +9,11 @@ permissions:
   security-events: write
   packages: write
   contents: read
+  
+env:
+  OCI_REGISTRY: ghcr.io
+  OCI_REPOSITORY: sebascorps/helm-charts
+
 jobs:
   ci-pipeline-job:
     uses: SebasCorps/reusable-workflows/.github/workflows/ci-pipeline.yml@main
@@ -25,7 +27,7 @@ jobs:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_PASSWORD }} 
-
+  
   deploy-with-kubectl:
     needs: ci-pipeline-job
     uses: SebasCorps/reusable-workflows/.github/workflows/deploy-with-kubectl.yml@main
@@ -34,9 +36,60 @@ jobs:
       IMAGE_NAME: ghcr.io/sebasxdd/thinkynx_app
     secrets:
       KUBECONFIG: ${{secrets.KUBECONFIG}}
-  #
+  
   selenium-tests:
      needs: deploy-with-kubectl
      uses: SebasCorps/reusable-workflows/.github/workflows/run-selenium-tests.yml@main
      with:
        ENVIRONMENT: STAGING
+
+  publish-helm-chart:
+    needs: selenium-tests
+    runs-on: ubuntu-latest 
+    steps:
+      - name: checkout Repo
+        uses: actions/checkout@v5
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+
+        with:
+          version: v3.12.0
+
+      - name: Install yq 
+        run: |
+          sudo curl -L https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -o /usr/local/bin/yq
+          sudo chmod +x /usr/local/bin/yq
+          yq --version
+
+      - name: Check Helm Version  & yq version
+        run: | 
+          helm version
+          yq --version
+      
+      - name: update image name chart YAML
+        run: |
+          export IMAGE_TAGS="${{ github.run_id }}-${GITHUB_SHA::7}"
+          export VERSION="0.1.0-${IMAGE_TAGS}"
+          yq e '.image.tag = strenv(IMAGE_TAGS)' charts/values.yaml -i
+          yq e '.version = strenv(VERSION)' charts/Chart.yaml -i
+          yq e '.appVersion = strenv(IMAGE_TAGS)' charts/Chart.yaml -i
+          cat charts/values.yaml
+          cat charts/Chart.yaml
+
+      - name: Lint Chart
+        run: helm lint charts/
+
+      - name: Create package
+        run: | 
+          helm package charts/
+          ls -ltr .
+      - name: Login to GHCR (OCI)
+        run: |
+          echo "${{secrets.GITHUB_TOKEN }}" | helm registry login ${{env.OCI_REGISTRY}} -u ${{ github.actor }} --password-stdin
+      - name: Push Helm Chart to GHCR (OCI)
+        run: |
+          CHART_PACKAGE=$(ls thinknyxapp-*.tgz)
+          helm push "${CHART_PACKAGE}" oci://${{env.OCI_REGISTRY}}/${{env.OCI_REPOSITORY}}
+      - name: logout from GHCR
+        run: helm registry logout ${{env.OCI_REGISTRY}}
