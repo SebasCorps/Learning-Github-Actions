@@ -13,7 +13,7 @@ service:
   type: NodePort
   port: 80
   targetPort: 8000
-  nodePort: 30007 # set to 0 or null to let k8s pick one
+  nodePort: 30008 # set to 0 or null to let k8s pick one (30007 is already used by the staging deployment)
 
 resources:
   requests:
