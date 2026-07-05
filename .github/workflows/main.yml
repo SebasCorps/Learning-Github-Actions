@@ -12,7 +12,7 @@ permissions:
   
 env:
   OCI_REGISTRY: ghcr.io
-  OCI_REPOSITORY: ${{ github.repository.owner }}/helm-charts
+  OCI_REPOSITORY: sebascorps/helm-charts
 
 jobs:
   ci-pipeline-job:
