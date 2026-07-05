@@ -85,8 +85,7 @@ jobs:
           echo "${{secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io -u ${{ github.actor }} --password-stdin
       - name: Push Helm Chart to GHCR (OCI)
         run: |
-          export IMAGE_TAGS="${{ github.run_id}}-${GITHUB_SHA::7}"
-          export VERSION="0.1.0-${IMAGE_TAGS}"
-          helm push thinkynx_app-${VERSION}.tgz oci://ghcr.io/SebasCorps/helm-charts
+          CHART_PACKAGE=$(ls thinknyxapp-*.tgz)
+          helm push "${CHART_PACKAGE}" oci://ghcr.io/SebasCorps/helm-charts
       - name: logout from GHCR
         run: helm registry logout ghcr.io
