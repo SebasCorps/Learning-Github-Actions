@@ -1,0 +1,9 @@
+apiVersion: v2
+name: thinknyxapp
+description: A Helm chart for thinknyxapp 
+type: application 
+version: 0.1.0
+appersion: "1.0.0" 
+keywords:
+- thinknyx
+home: https://github.com/{{ .Release.Service }} # optional

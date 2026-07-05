@@ -1,0 +1,43 @@
+# values.yaml - adjustable values for deployment & service
+replicaCount: 1
+
+image:
+  repository: ghcr.io/sebascorps/thinkynx_app
+  tag: latest 
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: NodePort
+  port: 80
+  targetPort: 8000
+  nodePort: 30007 # set to 0 or null to let k8s pick one
+
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "50m"
+  limits:
+    cpu: "250m"
+    memory: "128Mi"
+
+podLabels: {}
+podAnnotations: {}
+
+livenessProbe:
+  enabled: true
+  path: /
+  port: 8000
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  failureThreshold: 3
+
+readinessProbe:
+  enabled: true
+  path: /
+  port: 8000
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  failureThreshold: 3

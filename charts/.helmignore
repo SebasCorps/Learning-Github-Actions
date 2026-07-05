@@ -1,0 +1,6 @@
+*.tgz
+DS_STORE
+.git/
+.gitignore
+README.md
+tests/
