@@ -33,7 +33,14 @@ jobs:
             echo "${{secrets.KUBECONFIG}}" > $HOME/.kube/config
             chmod 600 $HOME/.kube/config
 
+        - name: Resolve latest chart version
+          id: chart_version
+          run: |
+            TOKEN=$(curl -s -u "${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}" "https://ghcr.io/token?scope=repository:${OCI_REPOSITORY}/thinknyxapp:pull&service=ghcr.io" | jq -r .token)
+            LATEST_TAG=$(curl -s -H "Authorization: Bearer ${TOKEN}" "https://ghcr.io/v2/${OCI_REPOSITORY}/thinknyxapp/tags/list" | jq -r '.tags | sort | last')
+            echo "version=${LATEST_TAG}" >> "$GITHUB_OUTPUT"
+
         - name: Deploy Helm Chart
           run: |
-            helm upgrade --install thinknyxapp oci://${{env.OCI_REGISTRY}}/${{env.OCI_REPOSITORY}}/thinknyxapp --namespace ${{vars.NAMESPACE}} --create-namespace --wait
+            helm upgrade --install thinknyxapp oci://${{env.OCI_REGISTRY}}/${{env.OCI_REPOSITORY}}/thinknyxapp --version "${{ steps.chart_version.outputs.version }}" --namespace ${{vars.NAMESPACE}} --create-namespace --wait
 
