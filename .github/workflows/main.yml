@@ -86,6 +86,6 @@ jobs:
       - name: Push Helm Chart to GHCR (OCI)
         run: |
           CHART_PACKAGE=$(ls thinknyxapp-*.tgz)
-          helm push "${CHART_PACKAGE}" oci://ghcr.io/SebasCorps/helm-charts
+          helm push "${CHART_PACKAGE}" oci://ghcr.io/sebascorps/helm-charts
       - name: logout from GHCR
         run: helm registry logout ghcr.io
